@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\PeliculaController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use PHPUnit\Framework\MockObject\Rule\Parameters;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,5 +29,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+Route::resource('peliculas', PeliculaController::class)->parameters(['peliculas' => 'pelicula']);
 
 require __DIR__.'/auth.php';

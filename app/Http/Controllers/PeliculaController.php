@@ -12,7 +12,9 @@ class PeliculaController extends Controller
      */
     public function index()
     {
-        //
+        return view('peliculas.index', [
+            'peliculas' => Pelicula::all(),
+        ]);
     }
 
     /**
@@ -20,7 +22,7 @@ class PeliculaController extends Controller
      */
     public function create()
     {
-        //
+        return view('peliculas.create');
     }
 
     /**
@@ -28,7 +30,15 @@ class PeliculaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'titulo' => 'required|max:255',
+        ]);
+
+        $Pelicula = new Pelicula();
+        $Pelicula->titulo = $validated['titulo'];
+        $Pelicula->save();
+        session()->flash('success', 'La película se ha creado correctamente.');
+        return redirect()->route('peliculas.index');
     }
 
     /**
@@ -36,7 +46,9 @@ class PeliculaController extends Controller
      */
     public function show(Pelicula $pelicula)
     {
-        //
+        return view('peliculas.show', [
+            'pelicula' => $pelicula,
+        ]);
     }
 
     /**
@@ -44,7 +56,9 @@ class PeliculaController extends Controller
      */
     public function edit(Pelicula $pelicula)
     {
-        //
+        return view('peliculas.edit', [
+            'pelicula' => $pelicula,
+        ]);
     }
 
     /**
@@ -52,7 +66,14 @@ class PeliculaController extends Controller
      */
     public function update(Request $request, Pelicula $pelicula)
     {
-        //
+        $validated = $request->validate([
+            'titulo' => 'required|max:255',
+        ]);
+
+        $pelicula->titulo = $validated['titulo'];
+        $pelicula->save();
+        session()->flash('success', 'Pelicula cambiada correctamente');
+        return redirect()->route('peliculas.index');
     }
 
     /**
@@ -60,6 +81,8 @@ class PeliculaController extends Controller
      */
     public function destroy(Pelicula $pelicula)
     {
-        //
+        $pelicula->delete();
+        session()->flash('success', 'La película se ha eliminado correctamente.');
+        return redirect()->route('peliculas.index');
     }
 }
