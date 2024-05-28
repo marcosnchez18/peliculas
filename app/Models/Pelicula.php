@@ -14,4 +14,14 @@ class Pelicula extends Model
     {
         return $this->hasMany(Proyeccion::class);
     }
+
+    public function cantidad_entradas()
+    {
+        $registros = Proyeccion::where('pelicula_id', $this->id)->get();
+        foreach ($registros as $registro) {
+            $cod = $registro->id;
+            $num_entradas = Entrada::where('proyeccion_id', $cod)->count();
+            return $num_entradas;
+        }
+    }
 }

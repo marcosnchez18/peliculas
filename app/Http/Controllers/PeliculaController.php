@@ -56,9 +56,15 @@ class PeliculaController extends Controller
      */
     public function edit(Pelicula $pelicula)
     {
-        return view('peliculas.edit', [
-            'pelicula' => $pelicula,
-        ]);
+        if ($pelicula->cantidad_entradas() > 0) {
+            session()->flash('error', 'No puedes cambiar una pelicula que tiene entradas vendidas');
+            return redirect()->route('peliculas.index');
+        }
+        else {
+            return view('peliculas.edit', [
+                'pelicula' => $pelicula,
+            ]);
+        }
     }
 
     /**
@@ -66,14 +72,21 @@ class PeliculaController extends Controller
      */
     public function update(Request $request, Pelicula $pelicula)
     {
-        $validated = $request->validate([
-            'titulo' => 'required|max:255',
-        ]);
+        if ($pelicula->cantidad_entradas() > 0) {
+            session()->flash('error', 'No puedes cambiar una pelicula que tiene entradas vendidas');
+            return redirect()->route('peliculas.index');
+        }else {
+            $validated = $request->validate([
+                'titulo' => 'required|max:255',
+            ]);
 
-        $pelicula->titulo = $validated['titulo'];
-        $pelicula->save();
-        session()->flash('success', 'Pelicula cambiada correctamente');
-        return redirect()->route('peliculas.index');
+            $pelicula->titulo = $validated['titulo'];
+            $pelicula->save();
+            session()->flash('success', 'Pelicula cambiada correctamente');
+            return redirect()->route('peliculas.index');
+
+        }
+
     }
 
     /**
@@ -81,8 +94,15 @@ class PeliculaController extends Controller
      */
     public function destroy(Pelicula $pelicula)
     {
-        $pelicula->delete();
-        session()->flash('success', 'La película se ha eliminado correctamente.');
-        return redirect()->route('peliculas.index');
+        if ($pelicula->cantidad_entradas() > 0) {
+            session()->flash('error', 'No puedes borrar una pelicula que tiene entradas vendidas');
+            return redirect()->route('peliculas.index');
+        } else {
+            $pelicula->delete();
+            session()->flash('success', 'La película se ha eliminado correctamente.');
+            return redirect()->route('peliculas.index');
+
+        }
+        //return redirect()->route('peliculas.index');  aqui tambien se puede y borrariamos los otros
     }
 }

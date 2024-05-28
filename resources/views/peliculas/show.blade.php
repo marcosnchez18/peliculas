@@ -10,6 +10,10 @@
                         Título
                     </th>
 
+                    <th class="px-6 py-3">
+                        Número de entradas
+                    </th>
+
 
 
 
@@ -23,15 +27,12 @@
                         {{ $pelicula->titulo }}
                     </td>
 
-                
+                    <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                        {!! $pelicula->cantidad_entradas() !!}
+                    </td>
 
-                    <div class="flex items-center justify-end mt-4">
-                        <a href="{{ route('peliculas.index') }}">
-                            <x-secondary-button class="ms-4">
-                                Volver
-                                </x-primary-button>
-                        </a>
-                    </div>
+
+
 
 
 
@@ -39,5 +40,12 @@
                 </tr>
             </tbody>
         </table>
+        <div class="flex items-center justify-end mt-4">
+            <a href="{{ route('peliculas.index') }}">
+                <x-secondary-button class="ms-4">
+                    Volver
+                    </x-primary-button>
+            </a>
+        </div>
     </div>
 </x-app-layout>
